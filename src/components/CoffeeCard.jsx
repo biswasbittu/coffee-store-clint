@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
 const CoffeeCard = ({ coffee }) => {
@@ -14,12 +15,21 @@ const CoffeeCard = ({ coffee }) => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Swal.fire(
-        //   'Deleted!',
-        //   'Your file has been deleted.',
-        //   'success'
-        // )
-        console.log('Delete Conformed')
+        // 
+        fetch(`http://localhost:5000/coffee/${_id}`,{
+          method:"DELETE"
+        })
+        .then(res=>res.json())
+        .then(data=>{
+          console.log(data)
+          if(data.deletedCount > 0){
+            Swal.fire(
+                'Deleted!',
+                'Your coffee has been deleted.',
+                'success'
+              )
+          }
+        })
       }
     })
   }
@@ -41,7 +51,7 @@ const CoffeeCard = ({ coffee }) => {
         <div className="card-actions justify-end">
           <div className="btn-group btn-group-vertical space-y-2">
             <button className="btn ">View</button>
-            <button className="btn">Edit</button>
+            <Link to={`/update-coffee/${_id}`}><button className="btn">Edit</button></Link>
             <button onClick={()=>handleDelete(_id)}
             className="btn bg-orange-500  rounded-2xl">X</button>
           </div>
