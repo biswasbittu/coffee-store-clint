@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 import "./AddCoffee/AddCoffee.css";
 
 const AddCoffee = () => {
@@ -18,7 +19,27 @@ const AddCoffee = () => {
     
      
        const newCoffee = { name,quantity,supplier,taste,category,details, potho};
-       console.log(newCoffee)
+      //  console.log(newCoffee)
+
+       fetch(`http://localhost:5000/coffee`,{
+        method:'POST',
+        headers:{
+          'content-type':'application/json'
+        },
+        body:JSON.stringify(newCoffee)
+       })
+       .then(res=>res.json())
+       .then(data=>{
+        console.log(data)
+        if(data.insertedId){
+          Swal.fire({
+            title: 'Success!',
+            text: 'User Added Successfully',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          })
+        }
+       })
   }
 
 
@@ -138,7 +159,7 @@ const AddCoffee = () => {
             </label>
           </div>
         </div>
-        <button className="btn btn-block bg-[#D2B48C] submit-btn text-black">block</button>
+        <button className="btn btn-block bg-[#D2B48C] submit-btn text-black">Add Coffee</button>
        
       </form>
     </div>
